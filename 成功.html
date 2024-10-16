@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+<head>
+    <meta charset="utf-8">
+    <title>ECharts</title>
+    <!-- 引入ECharts -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+</head>
+
+<body style="height: 100%; margin: 0">
+    <!-- 为ECharts准备一个DOM容器 -->
+    <div id="main" style="width: 100%; height: 700px;"></div>
+    <!-- 图表下方的说明区域 -->
+    <div id="legend" style="width: 100%; text-align: center; padding-top: 20px;">
+        <p style="font-size: 20px;">气泡大小代表空气优良天数比，颜色从蓝色到红色表示空气优良天数比从低到高变化</p>
+    </div>
+
+    <script type="text/javascript">
+        // 初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+
+        // 设置2010-2024年数据
+        var years = ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'];
+
+        var data = {
+            '2010': [
+                {name: '北京', value: [96.84, 0.9999, 0.7835]},
+                {name: '天津', value: [134.29, 1, 0.844]},
+                {name: '河北', value: [569.37, 1, 0.9233]}
+            ],
+            '2011': [
+                {name: '北京', value: [94.73, 0.9999, 0.7835]},
+                {name: '天津', value: [149.14, 1, 0.877]},
+                {name: '河北', value: [623.46, 0.9999, 0.9288]}
+            ],
+            '2012': [
+                {name: '北京', value: [95.94, 0.9998, 0.768]},
+                {name: '天津', value: [143.14, 1, 0.833]},
+                {name: '河北', value: [642.31, 0.9943, 0.929]}
+            ],
+            '2013': [
+                {name: '北京', value: [86.69, 0.9999, 0.4822]},
+                {name: '天津', value: [151.03, 0.9448, 0.3973]},
+                {name: '河北', value: [657.72, 0.998, 0.3534]}
+            ],
+            '2014': [
+                {name: '北京', value: [88.98, 0.9988, 0.471]},
+                {name: '天津', value: [143.93, 0.9442, 0.4795]},
+                {name: '河北', value: [624.59, 0.9978, 0.4164]}
+            ],
+            '2015': [
+                {name: '北京', value: [83.39, 0.9984, 0.5096]},
+                {name: '天津', value: [135.11, 0.9415, 0.6027]},
+                {name: '河北', value: [639.37, 0.978, 0.5205]}
+            ],
+            '2016': [
+                {name: '北京', value: [74.94, 0.7875, 0.541]},
+                {name: '天津', value: [130.35, 0.9273, 0.6175]},
+                {name: '河北', value: [614.57, 0.9601, 0.5656]}
+            ],
+            '2017': [
+                {name: '北京', value: [70.06, 0.9959, 0.6192]},
+                {name: '天津', value: [132.15, 0.9667, 0.5726]},
+                {name: '河北', value: [541.90, 0.8661, 0.5534]}
+            ],
+            '2018': [
+                {name: '北京', value: [71.88, 0.993, 0.6219]},
+                {name: '天津', value: [138.36, 0.968, 0.5671]},
+                {name: '河北', value: [595.29, 0.8328, 0.5699]}
+            ],
+            '2019': [
+                {name: '北京', value: [71.64, 0.9766, 0.6575]},
+                {name: '天津', value: [137.72, 0.9981, 0.600]},
+                {name: '河北', value: [593.43, 0.8139, 0.6192]}
+            ],
+            '2020': [
+                {name: '北京', value: [66.07, 0.9824, 0.7541]},
+                {name: '天津', value: [128.49, 1, 0.6694]},
+                {name: '河北', value: [589.56, 0.7256, 0.6995]}
+            ],
+            '2021': [
+                {name: '北京', value: [66.99, 0.9695, 0.789]},
+                {name: '天津', value: [141.01, 1, 0.7233]},
+                {name: '河北', value: [579.36, 0.6982, 0.737]}
+            ],
+            '2022': [
+                {name: '北京', value: [67.91, 0.9566, 0.7836]},
+                {name: '天津', value: [153.52, 1, 0.7315]},
+                {name: '河北', value: [569.15, 0.6709, 0.7397]}
+            ],
+            '2023': [
+                {name: '北京', value: [65.32, 0.9501, 0.7951]},
+                {name: '天津', value: [155.02, 0.997, 0.7254]},
+                {name: '河北', value: [563.11, 0.6685, 0.7412]}
+            ],
+            '2024': [
+                {name: '北京', value: [64.91, 0.9492, 0.8056]},
+                {name: '天津', value: [160.52, 0.993, 0.7305]},
+                {name: '河北', value: [560.33, 0.6629, 0.7501]}
+            ]
+        };
+
+        // 设置气泡图的配置项
+        var option = {
+            timeline: {
+                axisType: 'category',
+                autoPlay: true,
+                playInterval: 1000,
+                data: years,
+                bottom: '13px', // 将时间轴精确放置在页面最底部
+                height: '5px', // 调整时间轴的高度
+                lineStyle: {
+                    color: '#333',
+                    width: 2
+                },
+                checkpointStyle: {
+                    color: '#d94e5d',
+                    borderColor: '#d94e5d',
+                    borderWidth: 2
+                },
+                label: {
+                    color: '#666',
+                    fontSize: 12
+                }
+            },
+            baseOption: {
+                title: {
+                    text: '2010-2024年北京市、天津市、河北省的碳排放与环境指标',
+                    left: 'center',
+                    top: '60px', // 调整标题的顶部位置，留出更多空间
+                    textStyle: {
+                        fontSize: 22, // 调整标题字号
+                        fontWeight: 'bold'
+                    }
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (params) {
+                        return params.name + '<br/>碳排放: ' + params.value[0].toFixed(2) + ' 万吨<br/>垃圾处理率: ' 
+                        + (params.value[1] * 100).toFixed(2) + '%<br/>空气优良天数比: ' + (params.value[2] * 100).toFixed(2) + '%';
+                    },
+                    textStyle: {
+                        fontSize: 16 // 调整鼠标悬停时的字体大小
+                    }
+                },
+                visualMap: {
+                    min: 0.3,
+                    max: 1,
+                    dimension: 2, // 通过空气优良天数比控制颜色
+                    inRange: {
+                        color: ['#50a3ba', '#eac736', '#d94e5d']
+                    },
+                    text: ['高', '低'],
+                    calculable: true,
+                    right: 20,
+                    top: 'center',
+                    textStyle: {
+                        fontSize: 16 // 调整视觉映射区域的字号
+                    }
+                },
+                xAxis: {
+                    type: 'value',
+                    name: '碳排放 (万吨)',
+                    nameLocation: 'middle',
+                    nameTextStyle: {
+                        padding: 30,
+                        fontSize: 16 // 调整X轴名称的字号
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            type: 'dashed'
+                        }
+                    },
+                    scale: true,
+                    axisLabel: {
+                        fontSize: 14 // 调整X轴刻度的字号
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '生活垃圾无害化处理率 (%)',
+                    nameLocation: 'middle',
+                    nameTextStyle: {
+                        padding: 60, // 增加纵轴名称与图表的距离
+                        fontSize: 16 // 调整Y轴名称的字号
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            type: 'dashed'
+                        }
+                    },
+                    scale: true,
+                    axisLabel: {
+                        fontSize: 14 // 调整Y轴刻度的字号
+                    }
+                },
+                grid: {
+                    top: '25%', // 调整网格布局，避免图表内容与标题重叠
+                    bottom: '30%' // 增加底部留白，为时间轴留出更多空间
+                },
+                series: [
+                    {
+                        type: 'scatter',
+                        symbolSize: function (data) {
+                            return data[2] * 300; // 根据空气优良天数比设置更大的气泡大小
+                        }
+                    }
+                ]
+            },
+            options: []
+        };
+
+        // 为每一个年份设置对应的数据
+        for (var i = 0; i < years.length; i++) {
+            option.options.push({
+                series: [
+                    {
+                        data: data[years[i]]
+                    }
+                ]
+            });
+        }
+
+        // 使用指定的配置项和数据显示图表
+        myChart.setOption(option);
+    </script>
+</body>
+</html>
