@@ -1,25 +1,358 @@
 <!DOCTYPE html>
-<html style="height: 100%">
+<html lang="zh-CN">
 <head>
-    <meta charset="utf-8">
-    <title>ECharts</title>
-    <!-- 引入ECharts -->
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>京津冀人口高质量发展分析平台</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.2/dist/echarts.min.js"></script>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+        }
+        .main-container {
+            display: flex;
+            height: 100vh;
+        }
+        .sidebar {
+            width: 200px;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .nav-button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        .page {
+            display: none;
+        }
+        #map-container, .chart-container {
+            height: 400px;
+            margin-bottom: 20px;
+        }
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: #3498db;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+        }
+        .word-cloud {
+            height: 300px;
+            margin-top: 20px;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -17px;
+            background-color: white;
+            border: 4px solid #3498db;
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .left {
+            left: 0;
+        }
+        .right {
+            left: 50%;
+        }
+        .left::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            right: 30px;
+            border: medium solid #3498db;
+            border-width: 10px 0 10px 10px;
+            border-color: transparent transparent transparent #3498db;
+        }
+        .right::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            left: 30px;
+            border: medium solid #3498db;
+            border-width: 10px 10px 10px 0;
+            border-color: transparent #3498db transparent transparent;
+        }
+        .right::after {
+            left: -16px;
+        }
+        .content {
+            padding: 20px 30px;
+            background-color: white;
+            position: relative;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .word-cloud {
+            height: 300px;
+            margin-top: 20px;
+        }
+        .background-page {
+            background-color: #f0f8ff; /* 浅蓝色背景，您可以替换为实际的背景图片 */
+            padding: 20px;
+        }
+        .info-box {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .info-box:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        .info-content {
+            flex: 1;
+        }
+        .info-image {
+            width: 200px;
+            height: 150px;
+            background-color: #ddd; /* 占位符颜色，替换为实际图片 */
+            margin: 0 20px;
+        }
+        .info-title {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .info-icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+            color: #3498db;
+        }
+        @media screen and (max-width: 600px) {
+            .timeline::after {
+                left: 31px;
+            }
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            .timeline-item::before {
+                left: 60px;
+                border: medium solid #3498db;
+                border-width: 10px 10px 10px 0;
+                border-color: transparent #3498db transparent transparent;
+            }
+            .left::after, .right::after {
+                left: 15px;
+            }
+            .right {
+                left: 0%;
+            }
+        }
+       
+    </style>
 </head>
+<body>
+    <div class="main-container">
+        <div class="sidebar">
+            <h3>京津冀人口高质量发展</h3>
+            <button class="nav-button" onclick="showPage('background')">背景介绍</button>
+            <button class="nav-button" onclick="showPage('visualization')">数据可视化</button>
+            <button class="nav-button" onclick="showPage('prediction')">预测</button>
+            <button class="nav-button" onclick="showPage('policy')">政策</button>
+        </div>
+        <div class="content">
+            <div id="background" class="page background-page">
+                <h2>背景介绍</h2>
+                <h3>人口高质量评价体系指标说明</h3>
+                
+                <div class="info-box">
+                    <div class="info-image"></div>
+                    <div class="info-content">
+                        <div class="info-title"><span class="info-icon">📊</span>1. 人口素质</div>
+                        <p>平均受教育年龄：衡量地区人口科学文化素质，关系到劳动人口的技能水平和就业水平。</p>
+                        <p>健康老年人口占比：间接反映地区老年人口的生活质量以及地区的医疗护理水平。</p>
+                    </div>
+                </div>
 
-<body style="height: 100%; margin: 0">
-    <!-- 为ECharts准备一个DOM容器 -->
-    <div id="main" style="width: 100%; height: 700px;"></div>
-    <!-- 图表下方的说明区域 -->
-    <div id="legend" style="width: 100%; text-align: center; padding-top: 20px;">
-        <p style="font-size: 20px;">气泡大小代表空气优良天数比，颜色从蓝色到红色表示空气优良天数比从低到高变化</p>
+                <div class="info-box">
+                    <div class="info-image"></div>
+                    <div class="info-content">
+                        <div class="info-title"><span class="info-icon">💼</span>2. 人口经济发展</div>
+                        <p>人均地区生产总值能够反映一个地区在一定时期内经济活动的总量和生产效率，能够体现地区平均每人能够创造的经济价值。</p>
+                        <p>居民人均可支配收入直接体现地区居民的生活水平及消费能力。</p>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-image"></div>
+                    <div class="info-content">
+                        <div class="info-title"><span class="info-icon">🏠</span>3. 人口生活质量</div>
+                        <p>用教育文化娱乐消费占比能够反映地区居民在精神文化生活的需求，体现地区居民的生活质量。</p>
+                        <p>家庭人均蛋奶制品消费量直接关系到居民的营养状况和健康水平，体现地区居民对高水平生活的追求。</p>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-image"></div>
+                    <div class="info-content">
+                        <div class="info-title"><span class="info-icon">🌳</span>4. 人口宜居环境</div>
+                        <p>用空气优良天数在全年的占直接反映了某地的空气质量水平。</p>
+                        <p>碳排放量关系到全球变暖这一重大环境问题，是对国家节能减碳目标政策的响应。</p>
+                        <p>生活垃圾无害化处理率关系到垃圾的回收和利用对居民健康的影响。</p>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-image"></div>
+                    <div class="info-content">
+                        <div class="info-title"><span class="info-icon">🤝</span>5. 全民共享发展</div>
+                        <p>城乡居民收入占比反映了城乡居民收入在地区收入分配中的相对地位，能够体现城乡均衡发展情况。</p>
+                        <p>一般公共服务支出占GDP比率直接体现了公共服务的普及率和质量，能够展现政府在公共服务方面的投入力度。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="visualization" class="page">
+                <h2>数据可视化</h2>
+                <div id="main" style="width: 100%; height: 700px;"></div>
+                <div id="legend" style="width: 100%; text-align: center; padding-top: 20px;">
+                    <p style="font-size: 20px;">气泡大小代表空气优良天数比，颜色从蓝色到红色表示空气优良天数比从低到高变化</p>
+                </div>
+                <div id="education-chart" style="width: 100%; height: 700px;"></div>
+                <div id="gdp-chart" style="width: 100%; height: 700px;"></div>
+                <div id="income-expenditure-chart" style="width: 100%; height: 700px;"></div>
+            </div>
+
+            <div id="prediction" class="page">
+                <h2>未来十年指标预测</h2>
+                <div class="chart-container" id="prediction-chart"></div>
+            </div>
+            <div id="policy" class="page">
+                <h2 class="text-center mb-5">京津冀人口发展政策时间线</h2>
+                <div class="timeline">
+                    <div class="timeline-item left">
+                        <div class="content">
+                            <h3>2014年</h3>
+                            <p>《京津冀协同发展规划纲要》发布</p>
+                            <a href="#" class="btn btn-primary btn-sm">查看详情</a>
+                        </div>
+                    </div>
+                    <div class="timeline-item right">
+                        <div class="content">
+                            <h3>2016年</h3>
+                            <p>《"十三五"京津冀国民经济和社会发展规划》出台</p>
+                            <a href="#" class="btn btn-primary btn-sm">查看详情</a>
+                        </div>
+                    </div>
+                    <div class="timeline-item left">
+                        <div class="content">
+                            <h3>2018年</h3>
+                            <p>《京津冀协同发展三年行动计划》实施</p>
+                            <a href="#" class="btn btn-primary btn-sm">查看详情</a>
+                        </div>
+                    </div>
+                    <div class="timeline-item right">
+                        <div class="content">
+                            <h3>2020年</h3>
+                            <p>《京津冀协同发展规划纲要》修订版发布</p>
+                            <a href="#" class="btn btn-primary btn-sm">查看详情</a>
+                        </div>
+                    </div>
+                    <div class="timeline-item left">
+                        <div class="content">
+                            <h3>2022年</h3>
+                            <p>《京津冀协同发展"十四五"实施方案》出台</p>
+                            <a href="#" class="btn btn-primary btn-sm">查看详情</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="word-cloud" id="policy-word-cloud"></div>
+            </div>
+        </div>
     </div>
 
-    <script type="text/javascript">
-        // 初始化echarts实例
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 定义京津冀地图数据
+        const jingJinJiMap = {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {"name": "北京"},
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[[116.4551, 40.2539], [116.7, 40.1], [116.9, 39.9], [116.4, 39.4], [116.1, 39.8], [116.4551, 40.2539]]]
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "properties": {"name": "天津"},
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[[117.2, 39.1], [117.4, 39.2], [117.8, 39.1], [117.3, 38.7], [116.9, 38.9], [117.2, 39.1]]]
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "properties": {"name": "河北"},
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[[114.5, 41.0], [118.5, 41.0], [119.5, 39.5], [118.0, 37.5], [115.0, 37.5], [114.5, 41.0]]]
+                    }
+                }
+            ]
+        };
+
+        echarts.registerMap('jingJinJi', jingJinJiMap);
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.style.display = 'none');
+            document.getElementById(pageId).style.display = 'block';
+            if (pageId === 'visualization') {
+                renderVisualization();
+            } else if (pageId === 'prediction') {
+                renderPrediction();
+            } else if (pageId === 'policy') {
+                renderPolicyTimeline();
+                renderWordCloud();
+            }
+        }
+
+        
+        function renderVisualization() {
         var myChart = echarts.init(document.getElementById('main'));
 
-        // 设置2010-2024年数据
         var years = ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'];
 
         var data = {
@@ -100,15 +433,16 @@
             ]
         };
 
-        // 设置气泡图的配置项
+        
+
         var option = {
             timeline: {
                 axisType: 'category',
                 autoPlay: true,
                 playInterval: 1000,
                 data: years,
-                bottom: '13px', // 将时间轴精确放置在页面最底部
-                height: '5px', // 调整时间轴的高度
+                bottom: '13px',
+                height: '5px',
                 lineStyle: {
                     color: '#333',
                     width: 2
@@ -127,9 +461,9 @@
                 title: {
                     text: '2010-2024年北京市、天津市、河北省的碳排放与环境指标',
                     left: 'center',
-                    top: '60px', // 调整标题的顶部位置，留出更多空间
+                    top: '60px',
                     textStyle: {
-                        fontSize: 22, // 调整标题字号
+                        fontSize: 22,
                         fontWeight: 'bold'
                     }
                 },
@@ -140,13 +474,13 @@
                         + (params.value[1] * 100).toFixed(2) + '%<br/>空气优良天数比: ' + (params.value[2] * 100).toFixed(2) + '%';
                     },
                     textStyle: {
-                        fontSize: 16 // 调整鼠标悬停时的字体大小
+                        fontSize: 16
                     }
                 },
                 visualMap: {
                     min: 0.3,
                     max: 1,
-                    dimension: 2, // 通过空气优良天数比控制颜色
+                    dimension: 2,
                     inRange: {
                         color: ['#50a3ba', '#eac736', '#d94e5d']
                     },
@@ -155,7 +489,7 @@
                     right: 20,
                     top: 'center',
                     textStyle: {
-                        fontSize: 16 // 调整视觉映射区域的字号
+                        fontSize: 16
                     }
                 },
                 xAxis: {
@@ -164,7 +498,7 @@
                     nameLocation: 'middle',
                     nameTextStyle: {
                         padding: 30,
-                        fontSize: 16 // 调整X轴名称的字号
+                        fontSize: 16
                     },
                     splitLine: {
                         lineStyle: {
@@ -173,7 +507,7 @@
                     },
                     scale: true,
                     axisLabel: {
-                        fontSize: 14 // 调整X轴刻度的字号
+                        fontSize: 14
                     }
                 },
                 yAxis: {
@@ -181,8 +515,8 @@
                     name: '生活垃圾无害化处理率 (%)',
                     nameLocation: 'middle',
                     nameTextStyle: {
-                        padding: 60, // 增加纵轴名称与图表的距离
-                        fontSize: 16 // 调整Y轴名称的字号
+                        padding: 60,
+                        fontSize: 16
                     },
                     splitLine: {
                         lineStyle: {
@@ -191,18 +525,18 @@
                     },
                     scale: true,
                     axisLabel: {
-                        fontSize: 14 // 调整Y轴刻度的字号
+                        fontSize: 14
                     }
                 },
                 grid: {
-                    top: '25%', // 调整网格布局，避免图表内容与标题重叠
-                    bottom: '30%' // 增加底部留白，为时间轴留出更多空间
+                    top: '25%',
+                    bottom: '30%'
                 },
                 series: [
                     {
                         type: 'scatter',
                         symbolSize: function (data) {
-                            return data[2] * 300; // 根据空气优良天数比设置更大的气泡大小
+                            return data[2] * 300;
                         }
                     }
                 ]
@@ -210,7 +544,6 @@
             options: []
         };
 
-        // 为每一个年份设置对应的数据
         for (var i = 0; i < years.length; i++) {
             option.options.push({
                 series: [
@@ -221,8 +554,569 @@
             });
         }
 
-        // 使用指定的配置项和数据显示图表
         myChart.setOption(option);
+
+        // 添加新的教育程度比例图表
+        renderEducationChart();
+
+        // 添加新的人均GDP图表
+        renderGDPChart();
+
+        // 添加新的城乡居民收入比和民生支出占比图表
+        renderIncomeExpenditureChart();
+        }
+
+        function renderEducationChart() {
+            const chartDom = document.getElementById('education-chart');
+            const myChart = echarts.init(chartDom);
+
+            const data = {
+                years: ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'],
+                beijing: [0.33484445, 0.33939724, 0.37350276, 0.41207569, 0.38150701, 0.42335047, 0.45462031, 0.47609657, 0.48654963, 0.50485930, 0.44392364, 0.49142831, 0.50331032],
+                tianjin: [0.18728663, 0.20991015, 0.22845637, 0.23053013, 0.22848764, 0.23330820, 0.25610837, 0.28850271, 0.28290926, 0.28867940, 0.28412352, 0.32948227, 0.32819168],
+                hebei: [0.08191824, 0.05365355, 0.05787551, 0.07734161, 0.07942347, 0.10207661, 0.10306820, 0.09987637, 0.11198620, 0.11315319, 0.13316672, 0.14167162, 0.16078589]
+            };
+
+            function generatePredictionData(data, steps) {
+                const lastIndex = data.length - 1;
+                const trend = (data[lastIndex] - data[lastIndex - 1]) / data[lastIndex - 1];
+                return Array(steps).fill(0).map((_, i) => data[lastIndex] * Math.pow(1 + trend, i + 1));
+            }
+
+            const predictionSteps = 3;
+            const beijingPrediction = generatePredictionData(data.beijing, predictionSteps);
+            const tianjinPrediction = generatePredictionData(data.tianjin, predictionSteps);
+            const hebeiPrediction = generatePredictionData(data.hebei, predictionSteps);
+
+            const option = {
+                backgroundColor: '#ffffff',
+                title: {
+                    text: '京津冀受教育程度比例智能分析 (2010-2022)',
+                    subtext: '包含未来3年AI预测趋势',
+                    textStyle: {
+                        color: '#333333',
+                        fontSize: 22
+                    },
+                    subtextStyle: {
+                        color: '#666666',
+                        fontSize: 14
+                    },
+                    left: 'center',
+                    top: 20
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#6a7985'
+                        }
+                    }
+                },
+                legend: {
+                    data: ['北京', '天津', '河北'],
+                    textStyle: {
+                        color: '#333333'
+                    },
+                    top: 60
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: [...data.years, '2023(预测)', '2024(预测)', '2025(预测)'],
+                    axisLabel: {
+                        color: '#333333'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#333333'
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    axisLabel: {
+                        color: '#333333',
+                        formatter: '{value}'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#333333'
+                        }
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    }
+                },
+                series: [
+                    {
+                        name: '北京',
+                        type: 'line',
+                        data: [...data.beijing, ...beijingPrediction],
+                        symbolSize: 8,
+                        symbol: 'circle',
+                        smooth: true,
+                        lineStyle: {
+                            width: 3,
+                            shadowColor: 'rgba(255, 0, 0, 0.5)',
+                            shadowBlur: 10
+                        },
+                        itemStyle: {
+                            color: '#d94e5d',
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: 'rgba(217, 78, 93, 0.5)' },
+                                { offset: 1, color: 'rgba(217, 78, 93, 0.1)' }
+                            ])
+                        }
+                    },
+                    {
+                        name: '天津',
+                        type: 'line',
+                        data: [...data.tianjin, ...tianjinPrediction],
+                        symbolSize: 8,
+                        symbol: 'circle',
+                        smooth: true,
+                        lineStyle: {
+                            width: 3,
+                            shadowColor: 'rgba(0, 255, 0, 0.5)',
+                            shadowBlur: 10
+                        },
+                        itemStyle: {
+                            color: '#eac736',
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: 'rgba(234, 199, 54, 0.5)' },
+                                { offset: 1, color: 'rgba(234, 199, 54, 0.1)' }
+                            ])
+                        }
+                    },
+                    {
+                        name: '河北',
+                        type: 'line',
+                        data: [...data.hebei, ...hebeiPrediction],
+                        symbolSize: 8,
+                        symbol: 'circle',
+                        smooth: true,
+                        lineStyle: {
+                            width: 3,
+                            shadowColor: 'rgba(0, 0, 255, 0.5)',
+                            shadowBlur: 10
+                        },
+                        itemStyle: {
+                            color: '#50a3ba',
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: 'rgba(80, 163, 186, 0.5)' },
+                                { offset: 1, color: 'rgba(80, 163, 186, 0.1)' }
+                            ])
+                        }
+                    }
+                ],
+                animationDuration: 3000,
+                animationEasing: 'cubicInOut',
+                animationDelay: function (idx) {
+                    return idx * 100;
+                }
+            };
+
+            myChart.setOption(option);
+        }
+
+        function renderGDPChart() {
+            const chartDom = document.getElementById('gdp-chart');
+            const myChart = echarts.init(chartDom);
+
+            const data = {
+                years: ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'],
+                beijing: [73856, 81658, 87475, 93213, 99995, 106497, 118198, 128994, 140211, 164000, 164900, 183952, 190879],
+                tianjin: [72994, 85213, 93173, 100105, 105231, 107960, 115053, 118944, 120711, 119889, 123072, 138176, 142365],
+                hebei: [28668, 33969, 36584, 38909, 39984, 40255, 43062, 45387, 47772, 49125, 51100, 56371, 59312]
+            };
+
+            function generatePredictionData(data, steps) {
+                const lastIndex = data.length - 1;
+                const trend = (data[lastIndex] - data[lastIndex - 1]) / data[lastIndex - 1];
+                return Array(steps).fill(0).map((_, i) => data[lastIndex] * Math.pow(1 + trend, i + 1));
+            }
+
+            const predictionSteps = 3;
+            const beijingPrediction = generatePredictionData(data.beijing, predictionSteps);
+            const tianjinPrediction = generatePredictionData(data.tianjin, predictionSteps);
+            const hebeiPrediction = generatePredictionData(data.hebei, predictionSteps);
+
+            const option = {
+                backgroundColor: '#ffffff',
+                title: {
+                    text: '京津冀人均GDP分析 (2010-2022)',
+                    subtext: '包含未来3年AI预测趋势',
+                    textStyle: {
+                        color: '#333333',
+                        fontSize: 22
+                    },
+                    subtextStyle: {
+                        color: '#666666',
+                        fontSize: 14
+                    },
+                    left: 'center',
+                    top: 20
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        label: {
+                            backgroundColor: '#6a7985'
+                        }
+                    }
+                },
+                legend: {
+                    data: ['北京', '天津', '河北'],
+                    textStyle: {
+                        color: '#333333'
+                    },
+                    top: 60
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: [...data.years, '2023(预测)', '2024(预测)', '2025(预测)'],
+                    axisLabel: {
+                        color: '#333333'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#333333'
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '人均GDP (元)',
+                    axisLabel: {
+                        color: '#333333',
+                        formatter: '{value}'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#333333'
+                        }
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: 'rgba(0, 0, 0, 0.1)'
+                        }
+                    }
+                },
+                series: [
+                    {
+                        name: '北京',
+                        type: 'line',
+                        data: [...data.beijing, ...beijingPrediction],
+                        symbolSize: 8,
+                        symbol: 'circle',
+                        smooth: true,
+                        lineStyle: {
+                            width: 3,
+                            shadowColor: 'rgba(255, 0, 0, 0.5)',
+                            shadowBlur: 10
+                        },
+                        itemStyle: {
+                            color: '#d94e5d',
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: 'rgba(217, 78, 93, 0.5)' },
+                                { offset: 1, color: 'rgba(217, 78, 93, 0.1)' }
+                            ])
+                        }
+                    },
+                    {
+                        name: '天津',
+                        type: 'line',
+                        data: [...data.tianjin, ...tianjinPrediction],
+                        symbolSize: 8,
+                        symbol: 'circle',
+                        smooth: true,
+                        lineStyle: {
+                            width: 3,
+                            shadowColor: 'rgba(0, 255, 0, 0.5)',
+                            shadowBlur: 10
+                        },
+                        itemStyle: {
+                            color: '#eac736',
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: 'rgba(234, 199, 54, 0.5)' },
+                                { offset: 1, color: 'rgba(234, 199, 54, 0.1)' }
+                            ])
+                        }
+                    },
+                    {
+                        name: '河北',
+                        type: 'line',
+                        data: [...data.hebei, ...hebeiPrediction],
+                        symbolSize: 8,
+                        symbol: 'circle',
+                        smooth: true,
+                        lineStyle: {
+                            width: 3,
+                            shadowColor: 'rgba(0, 0, 255, 0.5)',
+                            shadowBlur: 10
+                        },
+                        itemStyle: {
+                            color: '#50a3ba',
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        },
+                        areaStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: 'rgba(80, 163, 186, 0.5)' },
+                                { offset: 1, color: 'rgba(80, 163, 186, 0.1)' }
+                            ])
+                        }
+                    }
+                ],
+                animationDuration: 3000,
+                animationEasing: 'cubicInOut',
+                animationDelay: function (idx) {
+                    return idx * 100;
+                }
+            };
+
+            myChart.setOption(option);
+        }
+
+        function renderIncomeExpenditureChart() {
+            const chartDom = document.getElementById('income-expenditure-chart');
+            const myChart = echarts.init(chartDom);
+
+            const option = {
+                backgroundColor: '#ffffff',
+                title: {
+                    text: '京津冀城乡居民收入比和民生支出占比近十三年变化',
+                    subtext: '数据来源：实际数据',
+                    left: 'center',
+                    top: 10,
+                    textStyle: {
+                        fontSize: 22,
+                        fontWeight: 'bold',
+                        color: '#333333'
+                    },
+                    subtextStyle: {
+                        fontSize: 14,
+                        color: '#666666'
+                    }
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        crossStyle: {
+                            color: '#999'
+                        }
+                    }
+                },
+                toolbox: {
+                    feature: {
+                        dataView: { show: true, readOnly: false },
+                        magicType: { show: true, type: ['line', 'bar'] },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
+                    }
+                },
+                legend: {
+                    data: ['北京城乡收入比', '天津城乡收入比', '河北城乡收入比', '北京民生支出占比', '天津民生支出占比', '河北民生支出占比'],
+                    bottom: 10
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'],
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '城乡居民收入比',
+                        min: 1.5,
+                        max: 3.5,
+                        interval: 0.5,
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    },
+                    {
+                        type: 'value',
+                        name: '民生支出占比',
+                        min: 0,
+                        max: 0.025,
+                        interval: 0.005,
+                        axisLabel: {
+                            formatter: '{value}'
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: '北京城乡收入比',
+                        type: 'bar',
+                        data: [2.60, 2.28, 2.44, 2.44, 2.40, 2.57, 2.57, 2.58, 2.57, 2.45, 3.30, 2.45, 2.41].map(v => v.toFixed(2)),
+                        itemStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: '#83bff6' },
+                                { offset: 0.5, color: '#188df0' },
+                                { offset: 1, color: '#188df0' }
+                            ])
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                    { offset: 0, color: '#2378f7' },
+                                    { offset: 0.7, color: '#2378f7' },
+                                    { offset: 1, color: '#83bff6' }
+                                ])
+                            }
+                        }
+                    },
+                    {
+                        name: '天津城乡收入比',
+                        type: 'bar',
+                        data: [2.06, 1.83, 1.96, 2.12, 1.85, 1.85, 1.85, 1.85, 1.86, 1.86, 1.86, 1.84, 1.83].map(v => v.toFixed(2)),
+                        itemStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: '#ffb980' },
+                                { offset: 0.5, color: '#ff7b2c' },
+                                { offset: 1, color: '#ff7b2c' }
+                            ])
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                    { offset: 0, color: '#ff9f4a' },
+                                    { offset: 0.7, color: '#ff9f4a' },
+                                    { offset: 1, color: '#ffb980' }
+                                ])
+                            }
+                        }
+                    },
+                    {
+                        name: '河北城乡收入比',
+                        type: 'bar',
+                        data: [2.73, 2.57, 2.54, 2.48, 2.37, 2.37, 2.37, 2.37, 2.35, 2.32, 2.26, 2.19, 2.13].map(v => v.toFixed(2)),
+                        itemStyle: {
+                            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                { offset: 0, color: '#a8e08e' },
+                                { offset: 0.5, color: '#5fb44b' },
+                                { offset: 1, color: '#5fb44b' }
+                            ])
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                                    { offset: 0, color: '#6ec84e' },
+                                    { offset: 0.7, color: '#6ec84e' },
+                                    { offset: 1, color: '#a8e08e' }
+                                ])
+                            }
+                        }
+                    },
+                    {
+                        name: '北京民生支出占比',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: [0.0170, 0.0161, 0.0160, 0.0150, 0.0128, 0.0130, 0.0143, 0.0176, 0.0169, 0.0141, 0.0146, 0.0132, 0.0142].map(v => v.toFixed(4)),
+                        lineStyle: {
+                            width: 3,
+                            shadowColor: 'rgba(0,0,0,0.3)',
+                            shadowBlur: 10,
+                            shadowOffsetY: 8
+                        }
+                    },
+                    {
+                        name: '天津民生支出占比',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: [0.0106, 0.0104, 0.0106, 0.0100, 0.0101, 0.0108, 0.0107, 0.0113, 0.0123, 0.0160, 0.0157, 0.0149, 0.0132].map(v => v.toFixed(4)),
+                        lineStyle: {
+                            width: 3,
+                            shadowColor: 'rgba(0,0,0,0.3)',
+                            shadowBlur: 10,
+                            shadowOffsetY: 8
+                        }
+                    },
+                    {
+                        name: '河北民生支出占比',
+                        type: 'line',
+                        yAxisIndex: 1,
+                        data: [0.0176, 0.0169, 0.0181, 0.0184, 0.0162, 0.0169, 0.0172, 0.0186, 0.0198, 0.0226, 0.0217, 0.0203, 0.0208].map(v => v.toFixed(4)),
+                        lineStyle: {
+                            width: 3,
+                            shadowColor: 'rgba(0,0,0,0.3)',
+                            shadowBlur: 10,
+                            shadowOffsetY: 8
+                        }
+                    }
+                ],
+                animationDuration: 2000,
+                animationEasing: 'cubicInOut',
+                animationDelay: function (idx) {
+                    return Math.random() * 200;
+                }
+            };
+
+            myChart.setOption(option);
+
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
+        }
+
+        function renderPrediction() {
+            // 渲染预测图表
+        }
+
+        function renderPolicyTimeline() {
+            // 渲染政策时间线
+        }
+
+        function renderWordCloud() {
+            // 渲染政策词云图
+        }
+
+        // 初始化显示背景介绍页面
+        showPage('background');
     </script>
 </body>
 </html>
