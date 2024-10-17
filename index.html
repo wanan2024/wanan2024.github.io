@@ -36,6 +36,19 @@
         .page {
             display: none;
         }
+
+        .chart-navigation {
+            margin-bottom: 20px;
+        }
+
+        .chart-page {
+            display: none;
+        }
+
+        .chart-page.active {
+            display: block;
+        }
+
         #map-container, .chart-container {
             height: 400px;
             margin-bottom: 20px;
@@ -178,7 +191,6 @@
                 left: 0%;
             }
         }
-       
     </style>
 </head>
 <body>
@@ -196,16 +208,20 @@
                 <h3>人口高质量评价体系指标说明</h3>
                 
                 <div class="info-box">
-                    <div class="info-image"></div>
+                    <div class="info-image">
+                        <img src="path/to/your/image.jpg" alt="描述图片内容" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
                     <div class="info-content">
                         <div class="info-title"><span class="info-icon">📊</span>1. 人口素质</div>
-                        <p>平均受教育年龄：衡量地区人口科学文化素质，关系到劳动人口的技能水平和就业水平。</p>
-                        <p>健康老年人口占比：间接反映地区老年人口的生活质量以及地区的医疗护理水平。</p>
+                        <p>每万人发明专利拥有量：反映一个地区的科技水平和创新能力，是该地区科学研究、知识产权保护和技术开发及应用等综合实力的集中体现。</p>
+                        <p>大学及以上学历人口占比：能够体现一个地区的教育水平和人力资源水平，与经济发展和社会进步紧密相关。</p>
                     </div>
                 </div>
 
                 <div class="info-box">
-                    <div class="info-image"></div>
+                    <div class="info-image">
+                        <img src="path/to/your/image.jpg" alt="描述图片内容" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
                     <div class="info-content">
                         <div class="info-title"><span class="info-icon">💼</span>2. 人口经济发展</div>
                         <p>人均地区生产总值能够反映一个地区在一定时期内经济活动的总量和生产效率，能够体现地区平均每人能够创造的经济价值。</p>
@@ -214,7 +230,9 @@
                 </div>
 
                 <div class="info-box">
-                    <div class="info-image"></div>
+                    <div class="info-image">
+                        <img src="path/to/your/image.jpg" alt="描述图片内容" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
                     <div class="info-content">
                         <div class="info-title"><span class="info-icon">🏠</span>3. 人口生活质量</div>
                         <p>用教育文化娱乐消费占比能够反映地区居民在精神文化生活的需求，体现地区居民的生活质量。</p>
@@ -223,7 +241,9 @@
                 </div>
 
                 <div class="info-box">
-                    <div class="info-image"></div>
+                    <div class="info-image">
+                        <img src="path/to/your/image.jpg" alt="描述图片内容" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
                     <div class="info-content">
                         <div class="info-title"><span class="info-icon">🌳</span>4. 人口宜居环境</div>
                         <p>用空气优良天数在全年的占直接反映了某地的空气质量水平。</p>
@@ -233,7 +253,9 @@
                 </div>
 
                 <div class="info-box">
-                    <div class="info-image"></div>
+                    <div class="info-image">
+                        <img src="path/to/your/image.jpg" alt="描述图片内容" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
                     <div class="info-content">
                         <div class="info-title"><span class="info-icon">🤝</span>5. 全民共享发展</div>
                         <p>城乡居民收入占比反映了城乡居民收入在地区收入分配中的相对地位，能够体现城乡均衡发展情况。</p>
@@ -244,13 +266,29 @@
 
             <div id="visualization" class="page">
                 <h2>数据可视化</h2>
-                <div id="main" style="width: 100%; height: 700px;"></div>
-                <div id="legend" style="width: 100%; text-align: center; padding-top: 20px;">
-                    <p style="font-size: 20px;">气泡大小代表空气优良天数比，颜色从蓝色到红色表示空气优良天数比从低到高变化</p>
+                <div class="chart-navigation">
+                    <button class="nav-button" onclick="showChartPage('chart1')">人口受教育程度分析</button>
+                    <button class="nav-button" onclick="showChartPage('chart2')">人均GDP分析</button>
+                    <button class="nav-button" onclick="showChartPage('chart3')">城乡收入与民生支出分析</button>
+                    <button class="nav-button" onclick="showChartPage('chart4')">空气质量与碳排放分析</button>
                 </div>
-                <div id="education-chart" style="width: 100%; height: 700px;"></div>
-                <div id="gdp-chart" style="width: 100%; height: 700px;"></div>
-                <div id="income-expenditure-chart" style="width: 100%; height: 700px;"></div>
+                <!-- 子页面的容器 -->
+                <div id="chart1" class="chart-page" style="display: none;">
+                    <h3>人口受教育程度分析</h3>
+                    <div id="education-chart" style="width: 100%; height: 700px;"></div>
+                </div>
+                <div id="chart2" class="chart-page" style="display: none;">
+                    <h3>人均GDP分析</h3>
+                    <div id="gdp-chart" style="width: 100%; height: 700px;"></div>
+                </div>
+                <div id="chart3" class="chart-page" style="display: none;">
+                    <h3>城乡收入与民生支出分析</h3>
+                    <div id="income-expenditure-chart" style="width: 100%; height: 700px;"></div>
+                </div>
+                <div id="chart4" class="chart-page" style="display: none;">
+                    <h3>空气质量与碳排放分析</h3>
+                    <div id="main" style="width: 100%; height: 700px;"></div>
+                </div>
             </div>
 
             <div id="prediction" class="page">
@@ -349,7 +387,32 @@
             }
         }
 
-        
+        function showChartPage(chartId) {
+            // 隐藏所有子页面
+            document.querySelectorAll('.chart-page').forEach(page => page.style.display = 'none');
+
+            // 显示对应的子页面
+            document.getElementById(chartId).style.display = 'block';
+
+            // 使用 setTimeout 延迟执行，确保页面元素已经渲染出来
+            setTimeout(function() {
+                // 根据需要渲染特定的图表
+                if (chartId === 'chart1') {
+                    renderEducationChart(); // 渲染教育程度图表
+                    echarts.getInstanceByDom(document.getElementById('education-chart')).resize();
+                } else if (chartId === 'chart2') {
+                    renderGDPChart(); // 渲染GDP图表
+                    echarts.getInstanceByDom(document.getElementById('gdp-chart')).resize();
+                } else if (chartId === 'chart3') {
+                    renderIncomeExpenditureChart(); // 渲染收入与支出图表
+                    echarts.getInstanceByDom(document.getElementById('income-expenditure-chart')).resize();
+                } else if (chartId === 'chart4') {
+                    renderVisualization(); // 渲染空气质量与碳排放图表
+                    echarts.getInstanceByDom(document.getElementById('main')).resize();
+                }
+            }, 100);  // 100毫秒延迟
+        }
+
         function renderVisualization() {
         var myChart = echarts.init(document.getElementById('main'));
 
@@ -432,8 +495,6 @@
                 {name: '河北', value: [560.33, 0.6629, 0.7501]}
             ]
         };
-
-        
 
         var option = {
             timeline: {
@@ -530,7 +591,8 @@
                 },
                 grid: {
                     top: '25%',
-                    bottom: '30%'
+                    bottom: '30%',
+                    containLabel: true
                 },
                 series: [
                     {
@@ -555,6 +617,9 @@
         }
 
         myChart.setOption(option);
+        window.addEventListener('resize', function() {
+            myChart.resize();
+        });
 
         // 添加新的教育程度比例图表
         renderEducationChart();
@@ -738,6 +803,9 @@
             };
 
             myChart.setOption(option);
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
         }
 
         function renderGDPChart() {
@@ -913,6 +981,9 @@
             };
 
             myChart.setOption(option);
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
         }
 
         function renderIncomeExpenditureChart() {
@@ -1097,7 +1168,6 @@
             };
 
             myChart.setOption(option);
-
             window.addEventListener('resize', function() {
                 myChart.resize();
             });
