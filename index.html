@@ -33,6 +33,7 @@
             margin-bottom: 10px;
             text-align: left;
         }
+.nav-button:hover { background-color: #e0e0e0; /* 鼠标悬停时按钮的颜色 */ }
         .page {
             display: none;
         }
@@ -209,7 +210,7 @@
                 
                 <div class="info-box">
                     <div class="info-image">
-                        <img src="path/to/your/image.jpg" alt="描述图片内容" style="width: 100%; height: 100%; object-fit: cover;">
+                        <img src="suzhi.webp" alt="描述图片内容" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
                     <div class="info-content">
                         <div class="info-title"><span class="info-icon">📊</span>1. 人口素质</div>
@@ -266,29 +267,49 @@
 
             <div id="visualization" class="page">
                 <h2>数据可视化</h2>
-                <div class="chart-navigation">
-                    <button class="nav-button" onclick="showChartPage('chart1')">人口受教育程度分析</button>
-                    <button class="nav-button" onclick="showChartPage('chart2')">人均GDP分析</button>
-                    <button class="nav-button" onclick="showChartPage('chart3')">城乡收入与民生支出分析</button>
-                    <button class="nav-button" onclick="showChartPage('chart4')">空气质量与碳排放分析</button>
-                </div>
+              <div class="chart-navigation">
+    <button class="nav-button" onclick="showChartPage('chart1')">人口素质</button>
+    <button class="nav-button" onclick="showChartPage('chart2')">人口经济发展</button>
+    <button class="nav-button" onclick="showChartPage('chart3')">人口生活质量</button>
+    <button class="nav-button" onclick="showChartPage('chart4')">人口宜居环境</button>
+    <button class="nav-button" onclick="showChartPage('chart5')">全民共享发展</button>
+</div>
+
                 <!-- 子页面的容器 -->
-                <div id="chart1" class="chart-page" style="display: none;">
-                    <h3>人口受教育程度分析</h3>
-                    <div id="education-chart" style="width: 100%; height: 700px;"></div>
-                </div>
-                <div id="chart2" class="chart-page" style="display: none;">
-                    <h3>人均GDP分析</h3>
-                    <div id="gdp-chart" style="width: 100%; height: 700px;"></div>
-                </div>
-                <div id="chart3" class="chart-page" style="display: none;">
-                    <h3>城乡收入与民生支出分析</h3>
-                    <div id="income-expenditure-chart" style="width: 100%; height: 700px;"></div>
-                </div>
-                <div id="chart4" class="chart-page" style="display: none;">
-                    <h3>空气质量与碳排放分析</h3>
-                    <div id="main" style="width: 100%; height: 700px;"></div>
-                </div>
+                <!-- 人口素质：显示“人口受教育程度分析” -->
+<div id="chart1" class="chart-page" style="display: none;">
+    <h3>人口素质</h3>
+    <div id="education-chart" style="width: 100%; height: 700px;"></div>
+</div>
+
+<!-- 人口经济发展：显示“人均GDP分析”、“人均可支配收入” -->
+<div id="chart2" class="chart-page" style="display: none;">
+    <h3>人口经济发展</h3>
+    <div id="gdp-chart" style="width: 100%; height: 400px;"></div>
+    <div id="disposable-income-chart" style="width: 100%; height: 400px;"></div>
+</div>
+
+<!-- 人口生活质量：显示“人均消费支出百分比”、“蛋及蛋制品消费” -->
+<div id="chart3" class="chart-page" style="display: none;">
+    <h3>人口生活质量</h3>
+    <div id="education-culture-chart" style="width: 100%; height: 400px;"></div>
+    <div id="egg-products-chart" style="width: 100%; height: 400px;"></div>
+</div>
+
+<!-- 人口宜居环境：显示“空气质量与碳排放分析” -->
+<div id="chart4" class="chart-page" style="display: none;">
+    <h3>人口宜居环境</h3>
+    <div id="main" style="width: 100%; height: 700px;"></div>
+</div>
+
+<!-- 全民共享发展：显示“城乡收入与民生支出分析” -->
+<div id="chart5" class="chart-page" style="display: none;">
+    <h3>全民共享发展</h3>
+    <div id="income-expenditure-chart" style="width: 100%; height: 700px;"></div>
+</div>
+
+
+
             </div>
 
             <div id="prediction" class="page">
@@ -387,31 +408,37 @@
             }
         }
 
-        function showChartPage(chartId) {
-            // 隐藏所有子页面
-            document.querySelectorAll('.chart-page').forEach(page => page.style.display = 'none');
+function showChartPage(chartId) {
+    document.querySelectorAll('.chart-page').forEach(page => page.style.display = 'none');
+    document.getElementById(chartId).style.display = 'block';
 
-            // 显示对应的子页面
-            document.getElementById(chartId).style.display = 'block';
+    if (chartId === 'chart1') {
+        // 人口素质: 生成“人口受教育程度分析”图表
+        renderEducationChart();
+        echarts.getInstanceByDom(document.getElementById('education-chart')).resize();
+    } else if (chartId === 'chart2') {
+        // 人口经济发展: 生成“人均GDP分析”和“人均可支配收入”两个图表
+        renderGDPChart();
+        renderDisposableIncomeChart();
+        echarts.getInstanceByDom(document.getElementById('gdp-chart')).resize();
+        echarts.getInstanceByDom(document.getElementById('disposable-income-chart')).resize();
+    } else if (chartId === 'chart3') {
+        // 人口生活质量: 生成“人均消费支出百分比”和“蛋及蛋制品消费”两个图表
+        renderEducationCultureChart();
+        renderEggProductsChart();
+        echarts.getInstanceByDom(document.getElementById('education-culture-chart')).resize();
+        echarts.getInstanceByDom(document.getElementById('egg-products-chart')).resize();
+    } else if (chartId === 'chart4') {
+        // 人口宜居环境: 生成“空气质量与碳排放分析”图表
+        renderVisualization();
+        echarts.getInstanceByDom(document.getElementById('main')).resize();
+    } else if (chartId === 'chart5') {
+        // 全民共享发展: 生成“城乡收入与民生支出分析”图表
+        renderIncomeExpenditureChart();
+        echarts.getInstanceByDom(document.getElementById('income-expenditure-chart')).resize();
+    }
+}
 
-            // 使用 setTimeout 延迟执行，确保页面元素已经渲染出来
-            setTimeout(function() {
-                // 根据需要渲染特定的图表
-                if (chartId === 'chart1') {
-                    renderEducationChart(); // 渲染教育程度图表
-                    echarts.getInstanceByDom(document.getElementById('education-chart')).resize();
-                } else if (chartId === 'chart2') {
-                    renderGDPChart(); // 渲染GDP图表
-                    echarts.getInstanceByDom(document.getElementById('gdp-chart')).resize();
-                } else if (chartId === 'chart3') {
-                    renderIncomeExpenditureChart(); // 渲染收入与支出图表
-                    echarts.getInstanceByDom(document.getElementById('income-expenditure-chart')).resize();
-                } else if (chartId === 'chart4') {
-                    renderVisualization(); // 渲染空气质量与碳排放图表
-                    echarts.getInstanceByDom(document.getElementById('main')).resize();
-                }
-            }, 100);  // 100毫秒延迟
-        }
 
         function renderVisualization() {
         var myChart = echarts.init(document.getElementById('main'));
@@ -1172,6 +1199,312 @@
                 myChart.resize();
             });
         }
+
+
+function renderEducationCultureChart() {
+    const chartDom = document.getElementById('education-culture-chart');
+    const myChart = echarts.init(chartDom);
+
+    var expenditures = [
+        [1576.49225, 2632.524237, 636.4785531],
+        [1804.98305, 2989.946745, 720.6018735],
+        [1979.64341, 3345.021022, 754.096245],
+        [1593.0628, 3621.436637, 1056.918083],
+        [1840.83248, 3800.646217, 1169.730157],
+        [2096, 3635, 1338.6],
+        [2404, 3687, 1449.2],
+        [2691, 3917, 1578.3],
+        [3187, 3999, 1734.5],
+        [3584.443292, 4311, 1984.1],
+        [2253.668286, 2766, 1799.1],
+        [3372.469, 3348, 2007.3],
+        [2545.9925, 3008, 1864.3]
+    ];
+
+    var years = ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'];
+
+    var tianjinData = expenditures.map(function (item) {
+        return (item[0] / (item[0] + item[1] + item[2])) * 100;
+    });
+    var beijingData = expenditures.map(function (item) {
+        return (item[1] / (item[0] + item[1] + item[2])) * 100;
+    });
+    var hebeiData = expenditures.map(function (item) {
+        return (item[2] / (item[0] + item[1] + item[2])) * 100;
+    });
+
+    var option = {
+        title: {
+            text: '京津冀教育文化娱乐人均消费支出百分比',
+            left: 'center',
+            textStyle: {
+                color: '#000',
+                fontWeight: 'bold',
+                fontSize: 24
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            formatter: function (params) {
+                var dataIndex = params[0].dataIndex;
+                return years[dataIndex] + '<br/>' +
+                    '天津: ' + expenditures[dataIndex][0].toFixed(2) + '元 (' + tianjinData[dataIndex].toFixed(2) + '%)<br/>' +
+                    '北京: ' + expenditures[dataIndex][1].toFixed(2) + '元 (' + beijingData[dataIndex].toFixed(2) + '%)<br/>' +
+                    '河北: ' + expenditures[dataIndex][2].toFixed(2) + '元 (' + hebeiData[dataIndex].toFixed(2) + '%)';
+            }
+        },
+        legend: {
+            data: ['天津', '北京', '河北'],
+            right: '10px',
+            top: '10px'
+        },
+        xAxis: {
+            type: 'category',
+            data: years
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value} %'
+            },
+            max: 100
+        },
+        series: [
+            {
+                name: '天津',
+                type: 'bar',
+                stack: 'total',
+                data: tianjinData,
+                itemStyle: {
+                    color: '#4b89db'
+                }
+            },
+            {
+                name: '北京',
+                type: 'bar',
+                stack: 'total',
+                data: beijingData,
+                itemStyle: {
+                    color: '#f57c6e'
+                }
+            },
+            {
+                name: '河北',
+                type: 'bar',
+                stack: 'total',
+                data: hebeiData,
+                itemStyle: {
+                    color: '#84c3b7'
+                }
+            }
+        ]
+    };
+
+    myChart.setOption(option);
+    window.addEventListener('resize', function() {
+        myChart.resize();
+    });
+}
+
+
+
+function renderDisposableIncomeChart() {
+    const chartDom = document.getElementById('disposable-income-chart');
+    const myChart = echarts.init(chartDom);
+
+    const option = {
+        title: {
+            text: '京津冀居民人均可支配收入（元）',
+            left: 'center',
+            textStyle: {
+                color: '#000',
+                fontWeight: 'bold',
+                fontSize: 24
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'cross'
+            }
+        },
+        legend: {
+            data: ['北京', '天津', '河北'],
+            right: '10px',
+            top: '10px'
+        },
+        xAxis: {
+            type: 'category',
+            data: ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022']
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value} 元'
+            }
+        },
+        series: [
+            {
+                name: '北京',
+                type: 'bar', 
+                data: [29073, 32903, 36469, 40830, 44488.6, 48458, 57275.3, 62406.3, 67989.9, 73848.5, 75601.5, 81517.5, 84023.1],
+                itemStyle: {
+                    color: '#f57c6e'
+                }
+            },
+            {
+                name: '北京趋势',
+                type: 'line', 
+                smooth: true, 
+                data: [29073, 32903, 36469, 40830, 44488.6, 48458, 57275.3, 62406.3, 67989.9, 73848.5, 75601.5, 81517.5, 84023.1],
+                itemStyle: {
+                    color: '#f57c6e'
+                }
+            },
+            {
+                name: '天津',
+                type: 'bar', 
+                data: [24293, 26921, 29626, 26359.2, 28832.3, 31291.4, 37109.6, 40277.5, 42976.3, 46118.9, 47658.5, 51485.7, 53003.2],
+                itemStyle: {
+                    color: '#fae69e'
+                }
+            },
+            {
+                name: '天津趋势',
+                type: 'line', 
+                smooth: true, 
+                data: [24293, 26921, 29626, 26359.2, 28832.3, 31291.4, 37109.6, 40277.5, 42976.3, 46118.9, 47658.5, 51485.7, 53003.2],
+                itemStyle: {
+                    color: '#fae69e'
+                }
+            },
+            {
+                name: '河北',
+                type: 'bar', 
+                data: [16263.4, 21810, 20543, 15189.6, 16647.4, 18118.1, 28249.4, 30547.8, 32977.2, 35737.7, 37285.7, 39791, 41277.7],
+                itemStyle: {
+                    color: '#84c3b7'
+                }
+            },
+            {
+                name: '河北趋势',
+                type: 'line', 
+                smooth: true, 
+                data: [16263.4, 21810, 20543, 15189.6, 16647.4, 18118.1, 28249.4, 30547.8, 32977.2, 35737.7, 37285.7, 39791, 41277.7],
+                itemStyle: {
+                    color: '#84c3b7'
+                }
+            }
+        ]
+    };
+
+    myChart.setOption(option);
+    window.addEventListener('resize', function() {
+        myChart.resize();
+    });
+}
+
+
+function renderEggProductsChart() {
+    const chartDom = document.getElementById('egg-products-chart');
+    const myChart = echarts.init(chartDom);
+
+    const data = [
+        [20.24510119, 11.60697711, 9.677558658],
+        [17.63373772, 15.34066396, 10.86959886],
+        [19.48264372, 15.31996151, 12.12882355],
+        [17.01055, 14.77997434, 11.34274472],
+        [16.82032, 14.23998717, 10.95666956],
+        [16.8, 13.7, 12.504103],
+        [17.8, 12, 13.3],
+        [18.3, 12.1, 14],
+        [17.7, 14.6, 13.69056769],
+        [18.47353194, 14.5, 15.72306838],
+        [21.45991715, 16.9, 18.71470174],
+        [19.9537, 16.2, 20.24551489],
+        [20.1806, 16.3, 22.05673042]
+    ];
+
+    const years = ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'];
+
+    const tianjinData = data.map(item => (item[0] / (item[0] + item[1] + item[2])) * 100);
+    const beijingData = data.map(item => (item[1] / (item[0] + item[1] + item[2])) * 100);
+    const hebeiData = data.map(item => (item[2] / (item[0] + item[1] + item[2])) * 100);
+
+    const option = {
+        title: {
+            text: '京津冀人均蛋及蛋制品消费量百分比',
+            left: 'center',
+            textStyle: {
+                color: '#000',
+                fontWeight: 'bold',
+                fontSize: 24
+            }
+        },
+        tooltip: {
+            trigger: 'axis',
+            formatter: function (params) {
+                const dataIndex = params[0].dataIndex;
+                return years[dataIndex] + '<br/>' +
+                    '天津: ' + data[dataIndex][0].toFixed(2) + ' (' + tianjinData[dataIndex].toFixed(2) + '%)<br/>' +
+                    '北京: ' + data[dataIndex][1].toFixed(2) + ' (' + beijingData[dataIndex].toFixed(2) + '%)<br/>' +
+                    '河北: ' + data[dataIndex][2].toFixed(2) + ' (' + hebeiData[dataIndex].toFixed(2) + '%)';
+            }
+        },
+        legend: {
+            data: ['天津', '北京', '河北'],
+            right: '10px',
+            top: '10px'
+        },
+        xAxis: {
+            type: 'category',
+            data: years
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: {
+                formatter: '{value} %'
+            },
+            max: 100
+        },
+        series: [
+            {
+                name: '天津',
+                type: 'bar',
+                stack: 'total',
+                data: tianjinData,
+                itemStyle: {
+                    color: '#4b89db'
+                }
+            },
+            {
+                name: '北京',
+                type: 'bar',
+                stack: 'total',
+                data: beijingData,
+                itemStyle: {
+                    color: '#f57c6e'
+                }
+            },
+            {
+                name: '河北',
+                type: 'bar',
+                stack: 'total',
+                data: hebeiData,
+                itemStyle: {
+                    color: '#84c3b7'
+                }
+            }
+        ]
+    };
+
+    myChart.setOption(option);
+    window.addEventListener('resize', function () {
+        myChart.resize();
+    });
+}
+
+
 
         function renderPrediction() {
             // 渲染预测图表
