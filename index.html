@@ -35,14 +35,14 @@
             padding: 10px;
             margin-bottom: 10px;
             text-align: center;  /* 修改为居中 */
-            background-color: #4CAF50;  /* 可以根据需要设置按钮背景颜色 */
+            background-color: #37c185;  /* 可以根据需要设置按钮背景颜色 */
             color: white;  /* 设置文字颜色 */
             border: none;  /* 去掉默认边框 */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* 按钮的阴影效果，让按钮更有立体感 */
             transition: all 0.3s ease;  /* 添加动画过渡效果 */
         }
         .nav-button:hover {
-            background-color: #45a049;  /* 鼠标悬停时改变按钮背景颜色 */
+            background-color: #2a9a69;  /* 鼠标悬停时改变按钮背景颜色 */
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);  /* 悬停时按钮阴影加深 */
             transform: translateY(-2px);  /* 悬停时按钮略微向上移动 */
         }
@@ -54,18 +54,25 @@
         .chart-nav-button {
             display: block;
             width: 100%;
-            padding: 10px;
+            
             margin-bottom: 10px;
             text-align: center;  /* 修改为居中 */
-            background-color: #4CAF50;  /* 可以根据需要设置按钮背景颜色 */
+            background-color: #37c185;  /* 可以根据需要设置按钮背景颜色 */
             color: white;  /* 设置文字颜色 */
             border: none;  /* 去掉默认边框 */
 
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* 按钮的阴影效果，让按钮更有立体感 */
             transition: all 0.3s ease;  /* 添加动画过渡效果 */
+    
+            flex-grow: 1;  /* 让按钮平分空间 */
+            margin-right: 0px;  /* 按钮之间的间距，减少到3px */
+            
+            font-size: 20px;  /* 增加字体大小 */
+            padding: 5px 10px;  /* 调整按钮的内边距，上下5px，左右10px */
         }
+
         .chart-nav-button:hover {
-            background-color: #45a049;  /* 鼠标悬停时改变按钮背景颜色 */
+            background-color: #289163;  /* 鼠标悬停时改变按钮背景颜色 */
             box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);  /* 悬停时按钮阴影加深 */
             transform: translateY(-2px);  /* 悬停时按钮略微向上移动 */
         }
@@ -77,7 +84,7 @@
         h3 {
             font-size: 26px;  /* 设置字体大小 */
             color: white;  /* 字体颜色 */
-            background: linear-gradient(45deg, #057219, #0aa908);  /* 渐变背景 */
+            background: linear-gradient(45deg, #8ae18a, #91e59e);  /* 渐变背景 */
             padding: 10px 20px;  /* 内边距 */
             border-radius: 8px;  /* 圆角 */
             text-align: center;  /* 居中对齐 */
@@ -130,8 +137,10 @@
             background-color: inherit;
             width: 50%;
         }
-
-
+        .word-cloud {
+            height: 300px;
+            margin-top: 20px;
+        }
         .timeline-item::after {
             content: '';
             position: absolute;
@@ -184,14 +193,12 @@
             border-radius: 6px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
-               .word-cloud {
-    height: 200px; /* 将高度从300px调小 */
-    max-width: 80%; /* 设置最大宽度为80% */
-    margin: 0 auto; /* 让词云图居中 */
-    margin-top: 20px;
-}
+        .word-cloud {
+            height: 300px;
+            margin-top: 20px;
+        }
         .background-page {
-            background-color: #f0f8ff; /* 浅蓝色背景，您可以替换为实际的背景图片 */
+            background-color: #eef8f0; /* 浅蓝色背景，您可以替换为实际的背景图片 */
             padding: 20px;
         }
         .info-box {
@@ -202,6 +209,7 @@
             padding: 20px;
             display: flex;
             align-items: center;
+            transition: all 0.3s ease;  /* 添加过渡效果 */
         }
         .info-box:nth-child(even) {
             flex-direction: row-reverse;
@@ -209,22 +217,31 @@
         .info-content {
             flex: 1;
         }
+        /* 当鼠标悬停在每个模块上时应用的样式 */
+        .info-box:hover {
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);  /* 悬停时阴影加深 */
+            transform: translateY(-2px);  /* 悬停时模块略微上移 */
+        }
+
         .info-image {
             width: 200px;
             height: 150px;
-            background-color: #ddd; /* 占位符颜色，替换为实际图片 */
+            background-color: #ddd;
             margin: 0 20px;
         }
+
         .info-title {
             font-weight: bold;
             font-size: 1.2em;
             margin-bottom: 10px;
         }
+
         .info-icon {
             font-size: 1.5em;
             margin-right: 10px;
             color: #3498db;
         }
+
         @media screen and (max-width: 600px) {
             .timeline::after {
                 left: 31px;
@@ -249,11 +266,78 @@
         }
         .policyimage-container {
             text-align: center; /* 使图片居中显示 */
-            margin-top: 0px; /* 在图片上方添加一些间距 */
+            margin-top: 20px; /* 在图片上方添加一些间距 */
         }
         .policyimage-container img {
             max-width: 100%; /* 设置图片最大宽度为容器宽度 */
             height: auto; /* 保持图片宽高比 */
+        }
+        
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #37c185;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .navbar-logo h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700; /* 700 是常用的加粗值 */
+        }
+
+        .navbar-search {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-search input {
+            padding: 8px 10px;
+            border: none;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+
+        .navbar-search button {
+            padding: 8px 12px;
+            background-color: #f0f0f0;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .navbar-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar-user span {
+            font-size: 18px;
+            color: white;
+        }
+
+        .navbar-user img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        /* To make sure the content doesn't go under the navbar */
+        body {
+            padding-top: 80px; /* Adjust this depending on your navbar's height */
+        }
+        #policy{
+            background-color: #eef8f0; /* 浅蓝色背景，您可以替换为实际的背景图片 */
+            padding: 20px;
         }
     </style>
 </head>
@@ -261,14 +345,28 @@
 
 <body>
     <div class="main-container">
+        <div class="navbar">
+            <div class="navbar-logo">
+                <h2>京津冀人口高质量发展</h2>
+            </div>
+            <div class="navbar-search">
+				<form action="https://www.baidu.com/s" method="get" target="_blank">
+                    			<input type="text" name="wd" placeholder="请输入搜索内容" required>
+                    			<button type="submit">🔍</button>
+                		</form>
+			</div>
+		</div>
+        
         <div class="sidebar">
-            <h3>京津冀人口高质量发展</h3>
-            <button class="nav-button" onclick="showPage('background')">背景介绍</button>
-            <button class="nav-button" onclick="showPage('visualization')">数据可视化</button>
-            <button class="nav-button" onclick="showPage('score')">评分</button>
-            <button class="nav-button" onclick="showPage('policy')">政策</button>
-        </div>
+            <button class="nav-button" onclick="showPage('background')" style="width: 100%; height: 90px; font-size: 20px;margin-bottom: 20px;border-radius: 5px;">背景介绍</button> 
+             <button class="nav-button" onclick="showPage('visualization')" style="width: 100%; height: 90px; font-size: 20px;margin-bottom: 20px;border-radius: 5px; ">数据可视化</button> 
+            <button class="nav-button" onclick="showPage('score')" style="width: 100%; height: 90px; font-size: 20px;margin-bottom: 20px;border-radius: 5px; ">评分体系</button> 
+             <button class="nav-button" onclick="showPage('policy')" style="width: 100%; height: 90px; font-size: 20px;margin-bottom: 20px;border-radius: 5px;">政策聚焦</button>
+             </div>
         <div class="content">
+            <div id="home" class="page home-page" style="display: block;">
+                <img src="home.jpg" alt="主页图片" style="width: 100%; height: auto; object-fit: cover;">
+            </div>
             <div id="background" class="page background-page">
                 <h3>人口高质量评价体系指标说明</h3>               
                 <div class="info-box">
@@ -329,11 +427,12 @@
 
             <div id="visualization" class="page">
                         <div class="chart-navigation">
-                <button class="chart-nav-button" onclick="showChartPage('chart1')">人口素质</button>
                 <button class="chart-nav-button" onclick="showChartPage('chart2')">人口经济发展</button>
-                <button class="chart-nav-button" onclick="showChartPage('chart3')">人口生活质量</button>
                 <button class="chart-nav-button" onclick="showChartPage('chart4')">人口宜居环境</button>
                 <button class="chart-nav-button" onclick="showChartPage('chart5')">全民共享发展</button>
+                <button class="chart-nav-button" onclick="showChartPage('chart3')">人口生活质量</button>
+                <button class="chart-nav-button" onclick="showChartPage('chart1')">人口素质</button>
+
             </div>
 
                 <!-- 子页面的容器 -->
@@ -369,7 +468,7 @@
             </div>
 
             <div id="score" class="page">
-                <h2>京津冀多维度指标评分情况</h2>
+                <h3>京津冀多维度指标评分情况</h3>
                 
                 <div id="score-chart" style="width: 100%; height: 500px;"></div>
                 <div id="score-stack-chart" style="width: 100%; height: 500px; margin-top: 40px;"></div>
@@ -377,45 +476,48 @@
 
 
             <div id="policy" class="page">
-                <h2 class="text-center mb-5">京津冀人口发展政策时间线</h2>
+                <h3 class="text-center mb-5">京津冀人口发展政策时间线</h3>
                 <div class="timeline">
                     <div class="timeline-item left">
                         <div class="content">
                             <h3>2014年</h3>
                             <p>《京津冀协同发展规划纲要》发布</p>
-                            <a href="#" class="btn btn-primary btn-sm">查看详情</a>
+                            <a href="http://politics.people.com.cn/n/2015/0501/c1001-26935006.html" class="btn btn-primary btn-sm" target="_blank">查看详情</a>
                         </div>
                     </div>
                     <div class="timeline-item right">
                         <div class="content">
                             <h3>2016年</h3>
                             <p>《"十三五"京津冀国民经济和社会发展规划》出台</p>
-                            <a href="#" class="btn btn-primary btn-sm">查看详情</a>
+                            <a href="http://politics.people.com.cn/n1/2016/0216/c1001-28125995.html" class="btn btn-primary btn-sm" target="_blank">查看详情</a>
                         </div>
                     </div>
                     <div class="timeline-item left">
                         <div class="content">
                             <h3>2018年</h3>
                             <p>《京津冀协同发展三年行动计划》实施</p>
-                            <a href="#" class="btn btn-primary btn-sm">查看详情</a>
+                            <a href="https://fgw.beijing.gov.cn/fgwzwgk/zcjd/201912/t20191226_1505464.htm" class="btn btn-primary btn-sm" target="_blank">查看详情</a>
                         </div>
                     </div>
                     <div class="timeline-item right">
                         <div class="content">
-                            <h3>2020年</h3>
-                            <p>《京津冀协同发展规划纲要》修订版发布</p>
-                            <a href="#" class="btn btn-primary btn-sm">查看详情</a>
+                            <h3>2019年</h3>
+                            <p>四部门关于印发《京津冀工业节水行动计划》的通知</p>
+                            <a href="https://www.gov.cn/xinwen/2019-09/18/content_5430869.htm" class="btn btn-primary btn-sm" target="_blank">查看详情</a>
                         </div>
                     </div>
+
+
                     <div class="timeline-item left">
                         <div class="content">
                             <h3>2022年</h3>
-                            <p>《京津冀协同发展"十四五"实施方案》出台</p>
-                            <a href="#" class="btn btn-primary btn-sm">查看详情</a>
+                            <p>《京津冀协同发展报告（2022）》发布</p>
+                            <a href="http://www.xiongan.gov.cn/2022-08/22/c_1211678190.htm" class="btn btn-primary btn-sm" target="_blank">查看详情</a>
                         </div>
                     </div>
                 </div>
-                <h2 class="text-center mb-6 mt-600">京津冀人口发展政策词云</h2>
+                <div style="height: 100px;"></div>
+                <h3 class="text-center mb-6 mt-600">京津冀人口发展政策词云</h3>
                 <div class="policyimage-container">
                     <img src="ciyuntuwa.jpg" alt="描述性文字">
                 </div>
@@ -428,11 +530,15 @@
 
 
 <script>
+        window.onload = function() {
+            showPage('home');  // 加载时显示首页
+        };
         function showPage(pageId) {
                     document.querySelectorAll('.page').forEach(page => page.style.display = 'none');
                     document.getElementById(pageId).style.display = 'block';
                     if (pageId === 'visualization') {
                         renderVisualization();
+                        showChartPage('chart2');  // 默认显示“人口经济发展”图表
                     } else if (pageId === 'score') {
                         renderScoringChart();
                         
@@ -441,7 +547,7 @@
                         renderWordCloud();
                     }
                 }
-
+              
         function showChartPage(chartId) {
             document.querySelectorAll('.chart-page').forEach(page => page.style.display = 'none');
             document.getElementById(chartId).style.display = 'block';
@@ -472,7 +578,7 @@
                 echarts.getInstanceByDom(document.getElementById('income-expenditure-chart')).resize();
             }
         }
-
+        
 
         function renderVisualization() {
         var myChart = echarts.init(document.getElementById('main'));
@@ -559,7 +665,7 @@
             timeline: {
                 axisType: 'category',
                 autoPlay: true,
-                playInterval: 1000,
+                playInterval: 800,
                 data: years,
                 bottom: '13px',
                 height: '5px',
@@ -830,7 +936,7 @@
             });
         }
 
-    
+
         function renderGDPChart() {
             const chartDom = document.getElementById('gdp-chart');
             const myChart = echarts.init(chartDom);
@@ -843,7 +949,7 @@
             };
 
             const option = {
-                backgroundColor: '#f0f0f0',
+                backgroundColor: '#Ffffff',
                 title: {
                     text: '京津冀人均GDP分析 (2010-2022)',
                     textStyle: {
@@ -900,15 +1006,20 @@
                     axisLabel: {
                         interval: 0,
                         rotate: 45
-                    }
+                    },
+                    name: '年份',
+                    nameGap: 30
                 },
                 yAxis3D: {
                     type: 'category',
-                    data: ['河北', '天津', '北京']
+                    data: ['河北', '天津', '北京'],
+                    name: '地区',
+                    nameGap: 30
                 },
                 zAxis3D: {
                     type: 'value',
-                    name: '人均GDP (元)'
+                    name: '人均GDP (元)',
+                    nameGap: 30
                 },
                 series: [{
                     type: 'bar3D',
@@ -922,11 +1033,11 @@
                         color: function(params) {
                             // 根据地区选择不同的单一颜色
                             if (params.value[1] === 0) {
-                                return '#6baed6';  // 河北：浅蓝色
+                                return '#A8E087';  // 河北
                             } else if (params.value[1] === 1) {
-                                return '#fdae6b';  // 天津：浅橙色
+                                return '#73C088';  // 天津
                             } else {
-                                return '#9e9ac8';  // 北京：浅紫色
+                                return '#397D54';  // 北京
                             }
                         },
                         opacity: 0.9
@@ -1490,7 +1601,7 @@
                     timeline: {
                         axisType: 'category',
                         autoPlay: true,
-                        playInterval: 1000,
+                        playInterval: 800,
                         data: years
                     },
                     tooltip: {
@@ -1516,12 +1627,16 @@
                         }
                     },
                     legend: {
-                        data: ['北京', '天津', '河北'],
-                        top: '8%',
-                        textStyle: {
-                            fontSize: 16
-                        }
-                    },
+    			data: ['北京', '天津', '河北'],
+    			orient: 'vertical',
+    			left: '80%',
+    			top: 'middle',
+    			textStyle: {
+        			color: '#555',
+        			fontSize: 12,
+        			fontFamily: 'Verdana'
+    				}
+			},
                     title: {
                         text: '京津冀人口高质量发展各维度评分',
                         left: 'center',
@@ -1586,7 +1701,10 @@
             option = {
                 title: {
                     text: '京津冀2010-2022年人口高质量发展各维度累加评分',
-                    left: 'center'
+                    left: 'center',
+                    textStyle: {
+                            fontSize: 24
+                        }
                 },
                 tooltip: {
                     trigger: 'axis',
